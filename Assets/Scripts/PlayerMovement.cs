@@ -11,11 +11,10 @@ public class PlayerMovement : MonoBehaviour {
 	
 	void Update () {	
 		
-		// 
+		// Conta que move o personagem;
 		horizontalMove = Input.GetAxisRaw("Horizontal") * runSpeed;
-		// Se o botão, configurado para "Jump", for pressionado...
+		// Se o botão configurado para "Jump" for pressionado...
 		if (Input.GetButtonDown("Jump")){
-			
 			//... pule!
 			jump = true;
 		}
@@ -23,9 +22,9 @@ public class PlayerMovement : MonoBehaviour {
 
     void FixedUpdate()
     {
-        	// Conta que move o personagem;
+        	// Certifica que o movimento seja contínuo;
 		controller.Move(horizontalMove * Time.fixedDeltaTime, false, jump);
-	    	// Reconhecendo que o player não está pulando assim que começa a fase;
+	    	// Reconhece que o player não está pulando assim que começa a fase;
 		jump = false;
     }
 }
