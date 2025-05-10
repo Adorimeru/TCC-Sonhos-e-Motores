@@ -9,12 +9,12 @@ public class CharacterController2D : MonoBehaviour
 	[SerializeField] private bool m_AirControl = false;							// Controle de movimento enquanto estiver no ar;
 	[SerializeField] private LayerMask m_WhatIsGround;							// Máscara para identificar chão;
 	[SerializeField] private Transform m_GroundCheck;							// Marcador de posicionamento para saber se player toca o chão;
-	[SerializeField] private Transform m_CeilingCheck;							// Marcador de posicionamento para saber se player toca o teto;
+	//[SerializeField] private Transform m_CeilingCheck;							// Marcador de posicionamento para saber se player toca o teto;
 	//[SerializeField] private Collider2D m_CrouchDisableCollider;				// A collider that will be disabled when crouching 
 
 	const float k_GroundedRadius = .2f; // Raio do circulo pra checar se player toca o chão;
 	private bool m_Grounded;            // Se player ta pisando no chão ou não.
-	const float k_CeilingRadius = .2f; // Radius of the overlap circle to determine if the player can stand up. Raio do circulo 
+	//const float k_CeilingRadius = .2f; // Radius of the overlap circle to determine if the player can stand up.
 	private Rigidbody2D m_Rigidbody2D;
 	private bool m_FacingRight = true;  // For determining which way the player is currently facing.
 	private Vector3 m_Velocity = Vector3.zero;
@@ -78,7 +78,7 @@ public class CharacterController2D : MonoBehaviour
 		{
 
 			// If crouching
-			if (crouch)
+			/*if (crouch)
 			{
 				if (!m_wasCrouching)
 				{
@@ -103,42 +103,42 @@ public class CharacterController2D : MonoBehaviour
 					m_wasCrouching = false;
 					OnCrouchEvent.Invoke(false);
 				}
-			}
+			}*/
 
-			// Move the character by finding the target velocity
+			//  Move o personagem com target velocity
 			Vector3 targetVelocity = new Vector2(move * 10f, m_Rigidbody2D.linearVelocity.y);
-			// And then smoothing it out and applying it to the character
+			// Suaviza o movimento e aplica no player
 			m_Rigidbody2D.linearVelocity = Vector3.SmoothDamp(m_Rigidbody2D.linearVelocity, targetVelocity, ref m_Velocity, m_MovementSmoothing);
 
-			// If the input is moving the player right and the player is facing left...
+   			// Se o input move o player pra direita e o player está virado para a esquerda...
 			if (move > 0 && !m_FacingRight)
 			{
-				// ... flip the player.
+				// ... vire o player.
 				Flip();
 			}
-			// Otherwise if the input is moving the player left and the player is facing right...
+   			// Se o input move o player pra direita e o player está virado para a esquerda...
 			else if (move < 0 && m_FacingRight)
 			{
-				// ... flip the player.
+				// ... vire o player.
 				Flip();
 			}
 		}
-		// If the player should jump...
+		// Se o player pular...
 		if (m_Grounded && jump)
 		{
-			// Add a vertical force to the player.
+			// ...Adicione força vertical para o player
 			m_Grounded = false;
 			m_Rigidbody2D.AddForce(new Vector2(0f, m_JumpForce));
 		}
 	}
 
-
+	// Vira o player para o lado oposto
 	private void Flip()
 	{
-		// Switch the way the player is labelled as facing.
+		// Troque o lado que o player é rotulado dependendo do lado que ele está virado
 		m_FacingRight = !m_FacingRight;
 
-		// Multiply the player's x local scale by -1.
+  		// Multiplica a local scale x do player por -1
 		Vector3 theScale = transform.localScale;
 		theScale.x *= -1;
 		transform.localScale = theScale;
