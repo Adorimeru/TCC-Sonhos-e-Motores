@@ -7,20 +7,18 @@ using UnityEngine.UI;
 public class InventorySystem : MonoBehaviour
 {
     [Header("General Fields")]
-    //List of items picked up
-    public List<GameObject> items= new List<GameObject>();
-    //flag indicates if the inventory is open or not
-    public bool isOpen;
+    public List<GameObject> items= new List<GameObject>();      // Lista dos itens coletados;
+    public bool isOpen;                                         // Indicador se o inventário está aberto;
+    
     [Header("UI Items Section")]
-    //Inventory System Window
-    public GameObject inventoryWindow;
-    public Image[] items_images;
+    public GameObject inventoryWindow;                          // Janela do inventário;
+    public Image[] items_images;                                // Lista das imagens dos itens no inventário;
 
     [Header("UI Item Description")]
-    public GameObject ui_Description_Window;
-    public Image description_Image;
-    public TextMeshProUGUI description_Title;
-    public TextMeshProUGUI description_Text;
+    public GameObject ui_Description_Window;                    // Janela de detalhes do item;
+    public Image description_Image;                             // Imagem do item; 
+    public TextMeshProUGUI description_Title;                   // Título(Nome) do item;
+    public TextMeshProUGUI description_Text;                    // Texto da descrição
 
     void Start()
     {
@@ -29,21 +27,26 @@ public class InventorySystem : MonoBehaviour
 
     private void Update()
     {
+        // Se apertar a tecla I...    
         if(Input.GetKeyDown(KeyCode.I))
         {
+            //...Abra o inventário!
             ToggleInventory();
         }
     }
 
+    // Define se o inventário está aberto ou fechado;
     void ToggleInventory()
     {
+        // Aberto e Não aberto;
         isOpen = !isOpen;
+        // Abra a janela do inventário;
         inventoryWindow.SetActive(isOpen);
-
+        // Atualize itens do inventário; 
         UpdateInventory_UI();
     }
 
-    //Hide all the items ui images
+    // Esconde todos os as imagens UI dos itens;
     void HideAll() 
     { 
         foreach (var i in items_images) {i.gameObject.SetActive(false);}
@@ -51,57 +54,60 @@ public class InventorySystem : MonoBehaviour
         HideDescription();
     }
     
-    //Add the item to the items list
+    // Adicione item à lista de itens coletados;
     public void PickUp(GameObject item)
     {
         items.Add(item);
         UpdateInventory_UI();                          
     }
 
-    //Check if inventoryfull
+    // Checando se o inventário está cheio;
     public bool InventoryFull()
     {
+        // Se o número de itens for igual a 6 (máx de slots)...
         if(items.Count == 6)
+        //...O inventário está lotado!
         {return true;}
         else
+        //...O inventário tem espaço!...por enquanto...
         {return false;}
     }
     
-    //Refresh the UI elements in the inventory window    
+    // Recarrega os elementos da UI na janela do inventário;
     void UpdateInventory_UI()
     {
         HideAll();
-        //For each item in the "items" list 
-        //Show it in the respective slot in the "items_images"
+        
+        // Coloca os items em ordem;
         for(int i=0;i<items.Count;i++)
         {
+            // Para cada item na lista de itens, mostre o item em seu respectivo slot;
             items_images[i].sprite = items[i].GetComponent<Item>().slotImage;
+            // Revela imagem do item;
             items_images[i].gameObject.SetActive(true);
         }
     }
-    
+    // Mostra elementos da descrição do item;
     public void ShowDescription(int id)
     {
-        //Set the Image
-        //description_Image.sprite = items_images[id].sprite;
-        description_Image.sprite = items[id].GetComponent<Item>().descriptionImage;
-        //Set the Title
-        description_Title.text = items[id].name;
-        //Show the description
-        description_Text.text = items[id].GetComponent<Item>().descriptionText;
-        //Show the elements
+        description_Image.sprite = items[id].GetComponent<Item>().descriptionImage;        // Setta imagem de descrição do item;'
+        description_Title.text = items[id].name;                                           // Setta nome do item;
+        description_Text.text = items[id].GetComponent<Item>().descriptionText;            // Setta descrição do item;
+        
+        // Revela tudo;
         description_Image.gameObject.SetActive(true);
         description_Title.gameObject.SetActive(true);
         description_Text.gameObject.SetActive(true);
     }
 
+    // Esconde a descrição pra quando nenhum item for analizado;
     public void HideDescription()
     {
         description_Image.gameObject.SetActive(false);
         description_Title.gameObject.SetActive(false);
         description_Text.gameObject.SetActive(false);
     }
-
+    // DEPOIS FAÇO SAPORRA QUE PREGUIÇA!!!
     public void Consume(int id)
     {
         if(items[id].GetComponent<Item>().type== Item.ItemType.Consumables)
