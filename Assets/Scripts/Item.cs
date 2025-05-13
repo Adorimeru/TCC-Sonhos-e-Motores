@@ -7,15 +7,15 @@ using UnityEngine.Events;
 [RequireComponent(typeof(BoxCollider2D))]
 public class Item : MonoBehaviour
 {    
-    public enum InteractionType { NONE, PickUp, Examine, GrabDrop, Workbench }
-    public enum ItemType { Staic, Consumables}
+    public enum InteractionType { NONE, PickUp, Examine, GrabDrop, Workbench }         // Drop down dos tipos de interação;
+    public enum ItemType { Staic, Consumables}                                         // Drop down do tipo de item;
     [Header("Attributes")]
     public InteractionType interactType;
     public ItemType type;
     [Header("Examine")]
-     public string descriptionText;
-     public Sprite slotImage;
-     public Sprite descriptionImage;
+    public string descriptionText;                                                     // Descrição do item no inventário;
+    public Sprite slotImage;                                                           // Imagem do item no slot do inventário;
+    public Sprite descriptionImage;                                                    // Imagem da descrição do item;
     [Header("Custom Events")]
     public UnityEvent customEvent;
     public UnityEvent consumeEvent;
@@ -23,49 +23,57 @@ public class Item : MonoBehaviour
     private void Reset()
     {
         GetComponent<Collider2D>().isTrigger = true;
+        // Layer "Interactable"
         gameObject.layer = 10;
     }
-
+    
+    // Interage;
     public void Interact()
     {
+        // Caso interaja com item de...
         switch(interactType)
         {
+            // Bancada...
             case InteractionType.Workbench:
+                // 
                 Object.FindFirstObjectByType<InteractionSystem>().Workbench(this);
                 break;
-    
-            case InteractionType.PickUp:
                 
-                if (Object.FindFirstObjectByType<InventorySystem>().InventoryFull())
-                {
+            // Pegar...
+            case InteractionType.PickUp:
+                // Se o inventário estiver cheio...
+                if (Object.FindFirstObjectByType<InventorySystem>().InventoryFull()){
+                // Escreva uma mensagem no console!
                 Debug.Log("INVENTÁRIO CHEIO!");
                 return;
                 }
-                else
-                {
-                //Add the object to the PickedUpItems list
+                // Se não...
+                else{
+                // ...Adicione o objeto para a lista de itens coletados!...
                 Object.FindFirstObjectByType<InventorySystem>().PickUp(gameObject);
-                //Disable
+                // ...E desabilite a imagem do item!
                 gameObject.SetActive(false);
                 }
                 break;
-
+                
+            // Examinar...
             case InteractionType.Examine:
-                //Call the Examine item in the interaction system
+                // ...Execute a interação de Examinar do script <InteractiveSystem>!
                 Object.FindFirstObjectByType<InteractionSystem>().ExamineItem(this);                
                 break;
-
+            
+            // Pegar e Soltar...
             case InteractionType.GrabDrop:
-                //Grab interaction
+                //...Execute a interação de pegar e soltar do script <InteractiveSystem>!
                 Object.FindFirstObjectByType<InteractionSystem>().GrabDrop();
                 break;
-
+        
             default:
                 Debug.Log("NULL ITEM");
                 break;
         }
 
-        //Invoke (call) the custom event(s)
+        // Invocar (chamar) o evento custom event;
         customEvent.Invoke();
     }
 }
