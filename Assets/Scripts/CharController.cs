@@ -3,23 +3,23 @@ using UnityEngine.Events;
 
 public class CharacterController2D : MonoBehaviour
 {
-	[SerializeField] private float m_JumpForce = 400f;							// Força do pulo;
+	[SerializeField] private float m_JumpForce = 400f;				// Força do pulo;
 	[Range(0, .3f)] [SerializeField] private float m_MovementSmoothing = .05f;	// Quantidade de suavização do movimento;
-	[SerializeField] private bool m_AirControl = false;							// Controle de movimento enquanto estiver no ar;
-	[SerializeField] private LayerMask m_WhatIsGround;							// Máscara para identificar chão;
-	[SerializeField] private Transform m_GroundCheck;							// Marcador de posicionamento para saber se player toca o chão (Checador de chão);
-	[SerializeField] private Transform m_CeilingCheck;							// Marcador de posicionamento para saber se player toca o teto;
+	[SerializeField] private bool m_AirControl = false;				// Controle de movimento enquanto estiver no ar;
+	[SerializeField] private LayerMask m_WhatIsGround;				// Máscara para identificar chão;
+	[SerializeField] private Transform m_GroundCheck;				// Marcador de posicionamento para saber se player toca o chão (Checador de chão);
+	[SerializeField] private Transform m_CeilingCheck;				// Marcador de posicionamento para saber se player toca o teto;
 	
-	const float k_GroundedRadius = .2f; 	// Raio do circulo pra checar se player toca o chão;
-	private bool m_Grounded;            	// Se player ta pisando no chão ou não;
-	private Rigidbody2D m_Rigidbody2D;
-	private bool m_FacingRight = true;  	// Determina para que lado o player está virado;
+	const float k_GroundedRadius = .2f; 						// Raio do circulo pra checar se player toca o chão;
+	private bool m_Grounded;            						// Se player ta pisando no chão ou não;
+	private Rigidbody2D m_Rigidbody2D;						// Aplica gravidade ao personagem;
+	private bool m_FacingRight = true;  						// Determina para que lado o player está virado;
 	private Vector3 m_Velocity = Vector3.zero;
 
 	[Header("Events")]
 	[Space]
 
-	public UnityEvent OnLandEvent;
+	public UnityEvent OnLandEvent;							// Sistema de eventos do Unity;
 
 	[System.Serializable]
 	public class BoolEvent : UnityEvent<bool> { }
