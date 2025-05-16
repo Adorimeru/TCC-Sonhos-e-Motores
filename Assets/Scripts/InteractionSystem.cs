@@ -8,17 +8,14 @@ using UnityEngine.UI;
 public class InteractionSystem : MonoBehaviour
 {
     [Header("Detection Fields")]
-    //Detection Point
-    public Transform detectionPoint;
-    //Detection Radius
-    private const float detectionRadius = 0.2f;
-    //Detection Layer
-    public LayerMask detectionLayer;
-    //Cached Trigger Object
-    public GameObject detectedObject;
+    public Transform detectionPoint;                        // Ponto de detecção de interação;
+    private const float detectionRadius = 0.2f;             // Raio da detecção de interação;
+    public LayerMask detectionLayer;                        // Camada de detecção de interação;
+    public GameObject detectedObject;                       // GameObject do objeto detectado;
+    
     [Header("Examine Fields")]
-    public GameObject workbenchWindow; // Workbench window object
-    public GameObject examineWindow; // Examine window object
+    public GameObject workbenchWindow;                      // Workbench window object
+    public GameObject examineWindow;                        // Examine window object
     public GameObject grabbedObject;
     public float grabbedObjectYValue;
     public Transform grabPoint;
@@ -52,6 +49,7 @@ public class InteractionSystem : MonoBehaviour
             }
         }
 
+        // Botão ESC também sai da tela da bancada;
         if(Input.GetKeyDown(KeyCode.Escape))
             {
                 workbenchWindow.SetActive(false);
@@ -59,12 +57,14 @@ public class InteractionSystem : MonoBehaviour
             }
     }
 
+    // Pinta o circulo de detecção de verde;
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.green;
         Gizmos.DrawSphere(detectionPoint.position, detectionRadius);
     }
 
+    // Botão de interagir;
     bool InteractInput()
     {
         return Input.GetKeyDown(KeyCode.E);
@@ -90,42 +90,46 @@ public class InteractionSystem : MonoBehaviour
     // Interação com a bancada;
     public void Workbench(Item item)
     {
+        // Se o personagem...
         if(isSitting)
         {
+            // ...não estiver interagindo com a bancada...
             isSitting = false;
+            // ...mantenha a janela da bancada oculta!
+            workbenchWindow.SetActive(false);    
+        }
+        else
+        {
+            //... estiver interagindo com a bancada...
+            isSitting = true;
+            // ...abra a janela da bancada!
+            workbenchWindow.SetActive(true);
+        }
+    }
 
-            workbenchWindow.SetActive(false);
+    // Interação de examinar itens;
+    public void ExamineItem(Item item)
+    {
+        // Se o personagem...
+        if(isExamining)
+        {
+            //...não estiver examinando um item...
+            isExamining = false;
+            //...oculte a janela de examinar.
+            examineWindow.SetActive(false);
             
         }
         else
         {
-
-            isSitting = true;
-
-            workbenchWindow.SetActive(true);
-        }
-
-    }
-
-    public void ExamineItem(Item item)
-    {
-        if(isExamining)
-        {
-            //Hide the Examine Window
-            examineWindow.SetActive(false);
-            //disable the boolean
-            isExamining = false;
-        }
-        else
-        {
-            //Show the item's image in the middle
-            examineImage.sprite = item.GetComponent<SpriteRenderer>().sprite;
-            //Write description text underneath the image
-            examineText.text = item.descriptionText;
-            //Display an Examine Window
-            examineWindow.SetActive(true);
-            //enable the boolean
+            // ...estiver examinando um item...
             isExamining = true;
+            // ...sette a imagem do item...
+            examineImage.sprite = item.GetComponent<SpriteRenderer>().sprite;
+            // ...sette a descrição do item...
+            examineText.text = item.descriptionText;
+            // ...e abra a janela de examinar!
+            examineWindow.SetActive(true);
+            
         }        
     }
 
